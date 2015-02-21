@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     public static string RESIDENTIAL_TILE = "R";
     public static string TOWNHALL_TILE = "TH";
     public static string CONVSTORE_TILE = "C";
+    public static string INDUSTRIAL_TILE = "I";
 
     public Vector3 ConvertRCtoV3(int r, int c)
     {
@@ -26,9 +27,21 @@ public class GameManager : MonoBehaviour {
         return localPosition;
     }
 
+    public Vector2 ConvertV3toRC(Vector3 position)
+    {
+        float row = -Mathf.FloorToInt(position.y / cellSize);
+        float col = Mathf.FloorToInt(position.x / cellSize);
+        return new Vector2(row, col+2f);
+    }
+
     public string GetTileName(int r, int c)
     {
         return string.Format("{0},{1}", r, c);
+    }
+
+    public string GetTileName(Vector2 rowColumnVector)
+    {
+        return GetTileName((int)rowColumnVector.x, (int)rowColumnVector.y);
     }
 
     private GameObject _addTileToLocation(int r, int c, string type)
@@ -54,6 +67,16 @@ public class GameManager : MonoBehaviour {
         {
             return false;
         }
+    }
+
+    public bool CheckForNeighbourTiles (int r, int c)
+    {
+        CityTile nTile = null;
+        if (TryGetTileAt(r + 1, c, ref nTile)) { return true; }
+        if (TryGetTileAt(r - 1, c, ref nTile)) { return true; }
+        if (TryGetTileAt(r, c + 1, ref nTile)) { return true; }
+        if (TryGetTileAt(r, c - 1, ref nTile)) { return true; }
+        return false;
     }
 
     public System.Collections.Generic.List<CityTile> GetNeighbourTiles (CityTile tile)
@@ -101,6 +124,28 @@ public class GameManager : MonoBehaviour {
 
         RefreshEconomy();
 
+        SelectTile("R");
+
+    }
+
+    private string _currentSelectedTile;
+    public string currentSelectedTile
+    {
+        get
+        {
+            return _currentSelectedTile;
+        }
+    }
+    public delegate void SelectedTileUpdated(string newTile);
+    public SelectedTileUpdated tileUpdateDelegate;
+    public void SelectTile(string TileName)
+    {
+        //Debug.Log("Select Tile: " + TileName);
+        _currentSelectedTile = TileName;
+        if (tileUpdateDelegate != null)
+        {
+            tileUpdateDelegate(TileName);
+        }
     }
 
     // Use this for initialization
@@ -133,5 +178,38 @@ public class GameManager : MonoBehaviour {
         }
 
         Gizmos.matrix = Matrix4x4.identity;
+    }
+
+    public void OnEndTurn()
+    {
+        Debug.Log("End Turn");
+
+        RefreshEconomy();
+        
+        cash += currentEconomy.profit;
+    }
+
+    public bool CanAddSelectedTileToLocation(int r, int c)
+    {
+        CityTile tile = null;
+        return CheckForNeighbourTiles(r, c) && !TryGetTileAt(r,c,ref tile);
+    }
+
+    public bool AddSelectedTileToLocation(Vector3 localPosition)
+    {
+        Vector2 rowColumn = ConvertV3toRC(localPosition);
+        int row = (int)rowColumn.x;
+        int col = (int)rowColumn.y;
+
+        if (CanAddSelectedTileToLocation(row, col))
+        {
+            _addTileToLocation(row, col, _currentSelectedTile);
+            RefreshEconomy();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

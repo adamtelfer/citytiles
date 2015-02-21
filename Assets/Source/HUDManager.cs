@@ -10,11 +10,15 @@ public class HUDManager : MonoBehaviour {
     public TextMesh profit;
     public TextMesh reputation;
 
+    public GameObject selectedIcon;
+
+    public GameObject tiles;
+
     public GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-        
+        gameManager.tileUpdateDelegate += new GameManager.SelectedTileUpdated(this.SelectedTileUpdated);
 	}
 
 	// Update is called once per frame
@@ -26,4 +30,30 @@ public class HUDManager : MonoBehaviour {
         power.text = "Power: " + gameManager.currentEconomy.power;
         reputation.text = "Rep: " + gameManager.currentEconomy.reputation;
 	}
+
+    void OnTap(TapGesture gesture) {
+       Collider2D collision = gesture.Raycast.Hit2D.collider;
+       if (collision == null) return;
+       if (collision.gameObject == null) return;
+
+       Debug.Log("Tapping Detected on Button: "+collision.gameObject.name);
+       Debug.Log("Tapping Selected on :" + gesture.Selection.name);
+       GameObject button = collision.gameObject;
+
+       if (button.name.Equals("EndTurn")) { gameManager.OnEndTurn(); }
+       else if (button.name.StartsWith("SELECT_")) { gameManager.SelectTile(button.name.Substring("SELECT_".Length)); }
+       else if (button.name.Equals("World")) {
+           Vector3 worldPosition = Camera.main.ScreenToWorldPoint(gesture.Position);
+           Vector3 localPosition = button.transform.worldToLocalMatrix.MultiplyPoint3x4(worldPosition);
+           gameManager.AddSelectedTileToLocation(localPosition); 
+       }
+
+        
+    }
+
+    void SelectedTileUpdated(string newTile)
+    {
+       //Debug.Log("Updating Selected Tile");
+        selectedIcon.transform.position = tiles.transform.Find("SELECT_" + newTile).transform.position;
+    }
 }
