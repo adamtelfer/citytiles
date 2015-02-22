@@ -6,6 +6,19 @@ using GoogleFu;
 
 public class Economy
 {
+
+    public enum Types
+    {
+        PROFIT = 1,
+        POPULATION = 2,
+        REPUTATION = 3,
+        JOBS = 4,
+        POWER = 5,
+        HEALTH = 6,
+        POLICE = 7,
+        FIRE = 8
+    }
+
     // money
     public int profit;
 
@@ -42,6 +55,18 @@ public class Economy
         health = config._health;
         police = config._police;
         fire = config._fire;
+    }
+
+    public void AddValue(Types t, int value)
+    {
+        if (t == Types.REPUTATION) reputation += value;
+        else if (t == Types.PROFIT) profit += value;
+        else if (t == Types.POPULATION) population += value;
+        else if (t == Types.POWER) power += value;
+        else if (t == Types.JOBS) jobs += value;
+        else if (t == Types.HEALTH) health += value;
+        else if (t == Types.POLICE) police += value;
+        else if (t == Types.FIRE) fire += value;
     }
 
     public static Economy operator +(Economy e1, Economy e2)

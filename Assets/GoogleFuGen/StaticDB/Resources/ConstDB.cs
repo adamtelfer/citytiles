@@ -90,7 +90,7 @@ namespace GoogleFu
 
 		private ConstDB()
 		{
-			Rows.Add( new ConstDBRow("5000"));
+			Rows.Add( new ConstDBRow("20"));
 		}
 		public IGoogleFuRow GetGenRow(string in_RowString)
 		{

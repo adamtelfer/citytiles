@@ -14,6 +14,7 @@ namespace GoogleFu
 	public class TileDBRow : IGoogleFuRow
 	{
 		public string _prefab;
+		public int _cost;
 		public int _profit;
 		public int _pop;
 		public int _rep;
@@ -22,9 +23,16 @@ namespace GoogleFu
 		public int _police;
 		public int _fire;
 		public int _health;
-		public TileDBRow(string __prefab, string __profit, string __pop, string __rep, string __power, string __jobs, string __police, string __fire, string __health) 
+		public TileDBRow(string __prefab, string __cost, string __profit, string __pop, string __rep, string __power, string __jobs, string __police, string __fire, string __health) 
 		{
 			_prefab = __prefab;
+			{
+			int res;
+				if(int.TryParse(__cost, out res))
+					_cost = res;
+				else
+					Debug.LogError("Failed To Convert cost string: "+ __cost +" to int");
+			}
 			{
 			int res;
 				if(int.TryParse(__profit, out res))
@@ -83,7 +91,7 @@ namespace GoogleFu
 			}
 		}
 
-		public int Length { get { return 9; } }
+		public int Length { get { return 10; } }
 
 		public string this[int i]
 		{
@@ -102,27 +110,30 @@ namespace GoogleFu
 					ret = _prefab.ToString();
 					break;
 				case 1:
-					ret = _profit.ToString();
+					ret = _cost.ToString();
 					break;
 				case 2:
-					ret = _pop.ToString();
+					ret = _profit.ToString();
 					break;
 				case 3:
-					ret = _rep.ToString();
+					ret = _pop.ToString();
 					break;
 				case 4:
-					ret = _power.ToString();
+					ret = _rep.ToString();
 					break;
 				case 5:
-					ret = _jobs.ToString();
+					ret = _power.ToString();
 					break;
 				case 6:
-					ret = _police.ToString();
+					ret = _jobs.ToString();
 					break;
 				case 7:
-					ret = _fire.ToString();
+					ret = _police.ToString();
 					break;
 				case 8:
+					ret = _fire.ToString();
+					break;
+				case 9:
 					ret = _health.ToString();
 					break;
 			}
@@ -137,6 +148,9 @@ namespace GoogleFu
 			{
 				case "prefab":
 					ret = _prefab.ToString();
+					break;
+				case "cost":
+					ret = _cost.ToString();
 					break;
 				case "profit":
 					ret = _profit.ToString();
@@ -170,6 +184,7 @@ namespace GoogleFu
 		{
 			string ret = System.String.Empty;
 			ret += "{" + "prefab" + " : " + _prefab.ToString() + "} ";
+			ret += "{" + "cost" + " : " + _cost.ToString() + "} ";
 			ret += "{" + "profit" + " : " + _profit.ToString() + "} ";
 			ret += "{" + "pop" + " : " + _pop.ToString() + "} ";
 			ret += "{" + "rep" + " : " + _rep.ToString() + "} ";
@@ -184,10 +199,10 @@ namespace GoogleFu
 	public sealed class TileDB : IGoogleFuDB
 	{
 		public enum rowIds {
-			RES, IND, CNV, TH
+			RES, IND, CNV, TH, PWR, PRK, POL
 		};
 		public string [] rowNames = {
-			"RES", "IND", "CNV", "TH"
+			"RES", "IND", "CNV", "TH", "PWR", "PRK", "POL"
 		};
 		public System.Collections.Generic.List<TileDBRow> Rows = new System.Collections.Generic.List<TileDBRow>();
 
@@ -205,39 +220,73 @@ namespace GoogleFu
 		private TileDB()
 		{
 			Rows.Add( new TileDBRow("Tile_Residence",
+														"3",
 														"0",
 														"2",
 														"0",
 														"-1",
 														"-2",
-														"0",
-														"0",
+														"1",
+														"1",
 														"0"));
 			Rows.Add( new TileDBRow("Tile_Industrial",
-														"0",
+														"3",
+														"1",
 														"0",
 														"-1",
-														"-1",
+														"-3",
 														"7",
-														"0",
-														"0",
+														"3",
+														"3",
 														"0"));
 			Rows.Add( new TileDBRow("Tile_ConvStore",
+														"5",
 														"1",
 														"0",
 														"0",
-														"-1",
-														"0",
-														"0",
-														"0",
+														"-2",
+														"2",
+														"3",
+														"1",
 														"0"));
 			Rows.Add( new TileDBRow("Tile_TownHall",
 														"5",
+														"5",
 														"0",
 														"5",
 														"10",
 														"10",
+														"-20",
+														"-20",
+														"0"));
+			Rows.Add( new TileDBRow("Tile_Power",
+														"10",
+														"-5",
 														"0",
+														"0",
+														"50",
+														"0",
+														"0",
+														"5",
+														"0"));
+			Rows.Add( new TileDBRow("Tile_Park",
+														"5",
+														"-2",
+														"0",
+														"0",
+														"0",
+														"0",
+														"0",
+														"3",
+														"0"));
+			Rows.Add( new TileDBRow("Tile_Police",
+														"5",
+														"-2",
+														"0",
+														"0",
+														"-1",
+														"0",
+														"-20",
 														"0",
 														"0"));
 		}
