@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GoogleFu;
 
 public class CityTile : MonoBehaviour {
 
@@ -14,9 +15,10 @@ public class CityTile : MonoBehaviour {
         return baseEconomy;
     }
 
-    public void Initialize(GameManager gm, GameObject root, string t, int r, int c)
+    public void Initialize(GameManager gm, TileDBRow config, string t, int r, int c)
     {
         baseEconomy = new Economy();
+        baseEconomy.ApplyConfig(config);
         type = t;
         row = r;
         column = c;

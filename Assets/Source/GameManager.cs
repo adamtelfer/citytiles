@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GoogleFu;
 
 public class GameManager : MonoBehaviour {
 
@@ -12,14 +13,17 @@ public class GameManager : MonoBehaviour {
     public Economy currentEconomy;
     public Economy baseEconomy;
 
-    public string[] keys;
-    public GameObject[] prefabs;
-    public System.Collections.Generic.Dictionary<string, GameObject> prefabList;
+    public static GoogleFu.ConstDBRow Constants
+    {
+        get { return GoogleFu.ConstDB.Instance.GetRow(GoogleFu.ConstDB.rowIds.GameConfig); }
+    }
 
-    public static string RESIDENTIAL_TILE = "R";
+    public GameObject TilePool;
+
+    public static string RESIDENTIAL_TILE = "RES";
     public static string TOWNHALL_TILE = "TH";
-    public static string CONVSTORE_TILE = "C";
-    public static string INDUSTRIAL_TILE = "I";
+    public static string CONVSTORE_TILE = "CNV";
+    public static string INDUSTRIAL_TILE = "IND";
 
     public Vector3 ConvertRCtoV3(int r, int c)
     {
@@ -46,10 +50,17 @@ public class GameManager : MonoBehaviour {
 
     private GameObject _addTileToLocation(int r, int c, string type)
     {
-        GameObject newTile = (GameObject)GameObject.Instantiate(prefabList[type]);
+        TileDBRow tileDBEntry = TileDB.Instance.GetRow(type);
+        DebugUtils.Assert(tileDBEntry != null, "No Tile DB Entry Found for " + type);
+
+        Transform child = TilePool.transform.FindChild(tileDBEntry._prefab);
+        DebugUtils.Assert(child != null, "Cannot find " + type + " in TilePool");
+
+        GameObject tilePrefab = child.gameObject;
+        GameObject newTile = (GameObject)GameObject.Instantiate(tilePrefab);
         newTile.name = GetTileName(r, c);
         CityTile tileComponent = newTile.GetComponent<CityTile>();
-        tileComponent.Initialize(this, prefabList[type], type, r, c);
+        tileComponent.Initialize(this, tileDBEntry, type, r, c);
         newTile.transform.parent = this.gameObject.transform;
         newTile.transform.localPosition = ConvertRCtoV3(r, c);
         return newTile;
@@ -104,7 +115,8 @@ public class GameManager : MonoBehaviour {
 
     public void InitializeState()
     {
-        cash = 5000;
+        cash = Constants._initialcash;
+
         currentEconomy = new Economy();
         baseEconomy = new Economy();
 
@@ -124,7 +136,7 @@ public class GameManager : MonoBehaviour {
 
         RefreshEconomy();
 
-        SelectTile("R");
+        SelectTile(RESIDENTIAL_TILE);
 
     }
 
@@ -150,11 +162,10 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
 	void Start () {
-        prefabList = new System.Collections.Generic.Dictionary<string, GameObject>(keys.Length);
-        for (int i = 0; i < keys.Length; ++i )
-        {
-            prefabList.Add(keys[i], prefabs[i]);
-        }
+        DebugUtils.Assert(TilePool != null, "Tile Pool does not exist");
+        DebugUtils.Assert(this.maxMapHeight > 0, "maxMapHeight is < 1");
+        DebugUtils.Assert(this.maxMapWidth > 0, "maxMapWidth is < 1");
+
         InitializeState();
 	}
 	

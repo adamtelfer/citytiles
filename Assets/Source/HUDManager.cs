@@ -18,6 +18,10 @@ public class HUDManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        DebugUtils.Assert(gameManager != null, "GameManager not attached to HUDManager");
+        DebugUtils.Assert(tiles != null, "Tiles List not attached to HUDManager");
+        DebugUtils.Assert(selectedIcon != null, "SelectedIcon not attached to HUDManager");
+
         gameManager.tileUpdateDelegate += new GameManager.SelectedTileUpdated(this.SelectedTileUpdated);
 	}
 
