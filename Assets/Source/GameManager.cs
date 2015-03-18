@@ -13,6 +13,33 @@ public class GameManager : MonoBehaviour {
     public Economy currentEconomy;
     public Economy baseEconomy;
 
+    private string _currentSelectedTile;
+    public string currentSelectedTile
+    {
+        get
+        {
+            return _currentSelectedTile;
+        }
+    }
+    public delegate void SelectedTileUpdated(string newTile);
+    public SelectedTileUpdated tileUpdateDelegate;
+    public void SelectTile(string TileName)
+    {
+        //Debug.Log("Select Tile: " + TileName);
+        _currentSelectedTile = TileName;
+        if (tileUpdateDelegate != null)
+        {
+            tileUpdateDelegate(TileName);
+        }
+    }
+
+    private CityTile _currentAddingTile;
+    public CityTile currentAddingTile
+    {
+        get
+        { return _currentAddingTile; }
+    }
+
     public static GoogleFu.ConstDBRow Constants
     {
         get { return GoogleFu.ConstDB.Instance.GetRow(GoogleFu.ConstDB.rowIds.GameConfig); }
@@ -46,6 +73,20 @@ public class GameManager : MonoBehaviour {
     public string GetTileName(Vector2 rowColumnVector)
     {
         return GetTileName((int)rowColumnVector.x, (int)rowColumnVector.y);
+    }
+
+    private bool _removeTile(int r, int c)
+    {
+        CityTile ctile = null;
+        if (TryGetTileAt(r, c, ref ctile))
+        {
+            GameObject go = ctile.gameObject;
+            go.transform.parent = null;
+            Destroy(go);
+            RefreshEconomy();
+            return true;
+        }
+        return false;
     }
 
     private GameObject _addTileToLocation(int r, int c, string type)
@@ -138,27 +179,9 @@ public class GameManager : MonoBehaviour {
 
         SelectTile(RESIDENTIAL_TILE);
 
+        _currentAddingTile = null;
     }
 
-    private string _currentSelectedTile;
-    public string currentSelectedTile
-    {
-        get
-        {
-            return _currentSelectedTile;
-        }
-    }
-    public delegate void SelectedTileUpdated(string newTile);
-    public SelectedTileUpdated tileUpdateDelegate;
-    public void SelectTile(string TileName)
-    {
-        //Debug.Log("Select Tile: " + TileName);
-        _currentSelectedTile = TileName;
-        if (tileUpdateDelegate != null)
-        {
-            tileUpdateDelegate(TileName);
-        }
-    }
 
     // Use this for initialization
 	void Start () {
@@ -198,6 +221,8 @@ public class GameManager : MonoBehaviour {
         RefreshEconomy();
         
         cash += currentEconomy.profit;
+
+        _currentAddingTile = null;
     }
 
     public bool CanAddSelectedTileToLocation(int r, int c)
@@ -208,13 +233,20 @@ public class GameManager : MonoBehaviour {
 
     public bool AddSelectedTileToLocation(Vector3 localPosition)
     {
+        if (_currentAddingTile != null)
+        {
+            _removeTile(_currentAddingTile.row, _currentAddingTile.column);
+            _currentAddingTile = null;
+        }
+
         Vector2 rowColumn = ConvertV3toRC(localPosition);
         int row = (int)rowColumn.x;
         int col = (int)rowColumn.y;
 
         if (CanAddSelectedTileToLocation(row, col))
         {
-            _addTileToLocation(row, col, _currentSelectedTile);
+            GameObject newTile = _addTileToLocation(row, col, _currentSelectedTile);
+            _currentAddingTile = newTile.GetComponent<CityTile>();
             RefreshEconomy();
             return true;
         }
