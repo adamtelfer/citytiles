@@ -30,7 +30,15 @@ public class HUDManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        cash.text = "Cash: $" + gameManager.cash;
+        if (gameManager.currentAddingTile == null)
+        {
+            cash.text = "Cash: $" + (gameManager.cash);
+        }
+        else
+        {
+            cash.text = "Cash: $" + (gameManager.cash - gameManager.currentAddingTile.cost);
+        }
+        
         profit.text = "Daily: $" + gameManager.currentEconomy.profit;
         jobs.text = "Jobs: " + gameManager.currentEconomy.jobs;
         population.text = "Pop: " + gameManager.currentEconomy.population;
