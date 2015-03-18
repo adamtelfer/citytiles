@@ -9,6 +9,9 @@ public class HUDManager : MonoBehaviour {
     public TextMesh power;
     public TextMesh profit;
     public TextMesh reputation;
+    public TextMesh police;
+    public TextMesh fire;
+    public TextMesh health;
 
     public GameObject selectedIcon;
 
@@ -33,6 +36,9 @@ public class HUDManager : MonoBehaviour {
         population.text = "Pop: " + gameManager.currentEconomy.population;
         power.text = "Power: " + gameManager.currentEconomy.power;
         reputation.text = "Rep: " + gameManager.currentEconomy.reputation;
+        police.text = "Police: " + gameManager.currentEconomy.police;
+        fire.text = "Fire: " + gameManager.currentEconomy.fire;
+        health.text = "Health: " + gameManager.currentEconomy.health;
 	}
 
     void OnTap(TapGesture gesture) {

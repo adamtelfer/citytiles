@@ -21,8 +21,8 @@ public class PointCloudGestureRenderer : MonoBehaviour
 
     public void Blink()
     {
-        animation.Stop();
-        animation.Play();
+        GetComponent<Animation>().Stop();
+        GetComponent<Animation>().Play();
     }
 
     public bool Render( PointCloudGestureTemplate template )

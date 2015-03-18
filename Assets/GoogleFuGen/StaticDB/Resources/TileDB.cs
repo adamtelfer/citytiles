@@ -199,10 +199,10 @@ namespace GoogleFu
 	public sealed class TileDB : IGoogleFuDB
 	{
 		public enum rowIds {
-			RES, IND, CNV, TH, PWR, PRK, POL
+			RES, IND, CNV, TH, PWR, PRK, POL, FRE, HSP
 		};
 		public string [] rowNames = {
-			"RES", "IND", "CNV", "TH", "PWR", "PRK", "POL"
+			"RES", "IND", "CNV", "TH", "PWR", "PRK", "POL", "FRE", "HSP"
 		};
 		public System.Collections.Generic.List<TileDBRow> Rows = new System.Collections.Generic.List<TileDBRow>();
 
@@ -289,6 +289,26 @@ namespace GoogleFu
 														"-20",
 														"0",
 														"0"));
+			Rows.Add( new TileDBRow("Tile_Fire",
+														"5",
+														"-2",
+														"0",
+														"0",
+														"-1",
+														"0",
+														"0",
+														"-20",
+														"0"));
+			Rows.Add( new TileDBRow("Tile_Hospital",
+														"5",
+														"-2",
+														"0",
+														"0",
+														"-1",
+														"0",
+														"0",
+														"0",
+														"-20"));
 		}
 		public IGoogleFuRow GetGenRow(string in_RowString)
 		{

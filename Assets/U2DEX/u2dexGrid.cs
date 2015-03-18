@@ -29,7 +29,7 @@ namespace u2dex
             var numLines = 0f;
             if (sceneCamObj != null)
             {
-                sceneCamera = sceneCamObj.camera;
+                sceneCamera = sceneCamObj.GetComponent<Camera>();
                 position = sceneCamera.transform.position;
 
                 numLines = sceneCamera.orthographicSize * 4.0f;

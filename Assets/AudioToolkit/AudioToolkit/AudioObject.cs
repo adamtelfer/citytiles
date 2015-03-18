@@ -430,11 +430,11 @@ public class AudioObject : RegisteredComponent
     {
         get
         {
-            return primaryAudioSource.pan;
+            return primaryAudioSource.panStereo;
         }
         set
         {
-            primaryAudioSource.pan = value;
+            primaryAudioSource.panStereo = value;
         }
     }
     
@@ -1059,11 +1059,11 @@ public class AudioObject : RegisteredComponent
 
         if ( _audioSource1 == null )
         {
-            _audioSource1 = audio;
+            _audioSource1 = GetComponent<AudioSource>();
         }
         else
         {
-            if ( _audioSource2 && _audioSource1 != audio ) // make sure that by default the primary audio source is _audioSource1 
+            if ( _audioSource2 && _audioSource1 != GetComponent<AudioSource>() ) // make sure that by default the primary audio source is _audioSource1 
             {
                 SwitchAudioSources();
             }
@@ -1088,7 +1088,7 @@ public class AudioObject : RegisteredComponent
        _audioSource2.maxDistance = _audioSource1.maxDistance;
        _audioSource2.dopplerLevel = _audioSource1.dopplerLevel;
        _audioSource2.spread = _audioSource1.spread;
-       _audioSource2.panLevel = _audioSource1.panLevel;
+       _audioSource2.spatialBlend = _audioSource1.spatialBlend;
        _audioSource2.velocityUpdateMode = _audioSource1.velocityUpdateMode;
        _audioSource2.ignoreListenerVolume = _audioSource1.ignoreListenerVolume;
        _audioSource2.playOnAwake = false;

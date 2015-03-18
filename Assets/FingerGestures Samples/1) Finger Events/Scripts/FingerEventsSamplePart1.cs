@@ -63,13 +63,13 @@ public class FingerEventsSamplePart1 : SampleBase
             {
                 UI.StatusText = "Finger entered " + fingerHoverObject.name;
 
-                originalHoverMaterial = fingerHoverObject.renderer.sharedMaterial;
-                fingerHoverObject.renderer.sharedMaterial = highlightMaterial;
+                originalHoverMaterial = fingerHoverObject.GetComponent<Renderer>().sharedMaterial;
+                fingerHoverObject.GetComponent<Renderer>().sharedMaterial = highlightMaterial;
             }
             else if( e.Phase == FingerHoverPhase.Exit ) // finger left the object
             {
                 UI.StatusText = "Finger left " + fingerHoverObject.name;
-                fingerHoverObject.renderer.sharedMaterial = originalHoverMaterial;
+                fingerHoverObject.GetComponent<Renderer>().sharedMaterial = originalHoverMaterial;
             }
         }
     }
@@ -92,10 +92,10 @@ public class FingerEventsSamplePart1 : SampleBase
                 stationaryFingerIndex = e.Finger.Index;
 
                 // remember the original material 
-                originalStationaryMaterial = selection.renderer.sharedMaterial;
+                originalStationaryMaterial = selection.GetComponent<Renderer>().sharedMaterial;
 
                 // change the material to show we've started the stationary state
-                selection.renderer.sharedMaterial = highlightMaterial;
+                selection.GetComponent<Renderer>().sharedMaterial = highlightMaterial;
             }
         }
         else if( e.Phase == FingerMotionPhase.Updated )
@@ -131,7 +131,7 @@ public class FingerEventsSamplePart1 : SampleBase
                 StopStationaryParticleEmitter();
 
                 // restore the original material
-                fingerStationaryObject.renderer.sharedMaterial = originalStationaryMaterial;
+                fingerStationaryObject.GetComponent<Renderer>().sharedMaterial = originalStationaryMaterial;
 
                 // reset our stationary finger index
                 stationaryFingerIndex = -1;

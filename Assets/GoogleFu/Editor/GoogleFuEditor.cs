@@ -148,7 +148,7 @@ namespace GoogleFu
                 var toDestroy = info.DatabaseAttachObject.GetComponent(info.ComponentName);
                 if (toDestroy != null)
                     DestroyImmediate(toDestroy);
-                var comp = (GoogleFuComponentBase)info.DatabaseAttachObject.AddComponent(info.ComponentName);
+                var comp = (GoogleFuComponentBase)UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(info.DatabaseAttachObject, "Assets/GoogleFu/Editor/GoogleFuEditor.cs (151,51)", info.ComponentName);
 
                 if (comp == null)
                 {

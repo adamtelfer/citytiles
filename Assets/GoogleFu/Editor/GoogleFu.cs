@@ -2504,7 +2504,7 @@ namespace GoogleFu
                 EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneLinux64 &&
                 EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneLinuxUniversal &&
                 EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android &&
-                EditorUserBuildSettings.activeBuildTarget != BuildTarget.iPhone &&
+                EditorUserBuildSettings.activeBuildTarget != BuildTarget.iOS &&
                 EditorUserBuildSettings.activeBuildTarget != BuildTarget.WP8Player)
             {
                 EditorGUILayout.HelpBox(Localize("ID_ERROR_BUILD_TARGET"), MessageType.Error);

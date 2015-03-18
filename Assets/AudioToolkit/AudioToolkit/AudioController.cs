@@ -1620,11 +1620,11 @@ public class AudioController : SingletonMonoBehaviour<AudioController>
         if ( audioItem.overrideAudioSourceSettings ) return audioItem.audioSource_MaxDistance;
         else if ( audioItem.category.AudioObjectPrefab != null )
         {
-            return audioItem.category.AudioObjectPrefab.audio.maxDistance;
+            return audioItem.category.AudioObjectPrefab.GetComponent<AudioSource>().maxDistance;
         }
         else
         {
-            return audioItem.category.audioController.AudioObjectPrefab.audio.maxDistance;
+            return audioItem.category.audioController.AudioObjectPrefab.GetComponent<AudioSource>().maxDistance;
         }
     }
 
@@ -2608,7 +2608,7 @@ public class AudioController : SingletonMonoBehaviour<AudioController>
 
         if ( playWithoutAudioObject )
         {
-            audioPrefab.audio.PlayOneShot( subItem.Clip, AudioObject.TransformVolume( volumeWithCategory ) ); // unfortunately produces warning message, but works (tested only with Unity 3.5)
+            audioPrefab.GetComponent<AudioSource>().PlayOneShot( subItem.Clip, AudioObject.TransformVolume( volumeWithCategory ) ); // unfortunately produces warning message, but works (tested only with Unity 3.5)
 
             //AudioSource.PlayClipAtPoint( subItem.Clip, Vector3.zero, AudioObject.TransformVolume( volumeWithCategory ) );
             return null;
@@ -2667,7 +2667,7 @@ public class AudioController : SingletonMonoBehaviour<AudioController>
         audioObjInstance.name = "AudioObject:" + sndObj.primaryAudioSource.clip.name;
         
         sndObj.primaryAudioSource.pitch = AudioObject.TransformPitch( subItem.PitchShift );
-        sndObj.primaryAudioSource.pan = subItem.Pan2D;
+        sndObj.primaryAudioSource.panStereo = subItem.Pan2D;
 
         if ( subItem.RandomStartPosition )
         {

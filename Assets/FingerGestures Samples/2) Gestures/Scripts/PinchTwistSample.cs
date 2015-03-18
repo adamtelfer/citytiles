@@ -118,7 +118,7 @@ public class PinchTwistSample : SampleBase
         else
             m = originalMaterial;
 
-        target.renderer.sharedMaterial = m;
+        target.GetComponent<Renderer>().sharedMaterial = m;
     }
 
     #endregion
@@ -140,7 +140,7 @@ public class PinchTwistSample : SampleBase
 
         UI.StatusText = "Use two fingers anywhere on the screen to rotate and scale the green object.";
 
-        originalMaterial = target.renderer.sharedMaterial;
+        originalMaterial = target.GetComponent<Renderer>().sharedMaterial;
     }
 
     #endregion
