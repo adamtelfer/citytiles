@@ -23,7 +23,8 @@ namespace GoogleFu
 		public int _police;
 		public int _fire;
 		public int _health;
-		public TileDBRow(string __prefab, string __cost, string __profit, string __pop, string __rep, string __power, string __jobs, string __police, string __fire, string __health) 
+		public int _radius;
+		public TileDBRow(string __prefab, string __cost, string __profit, string __pop, string __rep, string __power, string __jobs, string __police, string __fire, string __health, string __radius) 
 		{
 			_prefab = __prefab;
 			{
@@ -89,9 +90,16 @@ namespace GoogleFu
 				else
 					Debug.LogError("Failed To Convert health string: "+ __health +" to int");
 			}
+			{
+			int res;
+				if(int.TryParse(__radius, out res))
+					_radius = res;
+				else
+					Debug.LogError("Failed To Convert radius string: "+ __radius +" to int");
+			}
 		}
 
-		public int Length { get { return 10; } }
+		public int Length { get { return 11; } }
 
 		public string this[int i]
 		{
@@ -136,6 +144,9 @@ namespace GoogleFu
 				case 9:
 					ret = _health.ToString();
 					break;
+				case 10:
+					ret = _radius.ToString();
+					break;
 			}
 
 			return ret;
@@ -176,6 +187,9 @@ namespace GoogleFu
 				case "health":
 					ret = _health.ToString();
 					break;
+				case "radius":
+					ret = _radius.ToString();
+					break;
 			}
 
 			return ret;
@@ -193,6 +207,7 @@ namespace GoogleFu
 			ret += "{" + "police" + " : " + _police.ToString() + "} ";
 			ret += "{" + "fire" + " : " + _fire.ToString() + "} ";
 			ret += "{" + "health" + " : " + _health.ToString() + "} ";
+			ret += "{" + "radius" + " : " + _radius.ToString() + "} ";
 			return ret;
 		}
 	}
@@ -228,9 +243,10 @@ namespace GoogleFu
 														"-2",
 														"-1",
 														"-1",
-														"-1"));
+														"-1",
+														"0"));
 			Rows.Add( new TileDBRow("Tile_Industrial",
-														"3",
+														"5",
 														"1",
 														"0",
 														"-3",
@@ -238,9 +254,10 @@ namespace GoogleFu
 														"7",
 														"-3",
 														"-3",
-														"-3"));
+														"-3",
+														"1"));
 			Rows.Add( new TileDBRow("Tile_ConvStore",
-														"5",
+														"10",
 														"1",
 														"0",
 														"0",
@@ -248,9 +265,10 @@ namespace GoogleFu
 														"2",
 														"-3",
 														"-1",
-														"-1"));
+														"-1",
+														"1"));
 			Rows.Add( new TileDBRow("Tile_TownHall",
-														"5",
+														"50",
 														"5",
 														"0",
 														"5",
@@ -258,9 +276,10 @@ namespace GoogleFu
 														"10",
 														"20",
 														"20",
-														"20"));
+														"20",
+														"0"));
 			Rows.Add( new TileDBRow("Tile_Power",
-														"10",
+														"100",
 														"-5",
 														"0",
 														"0",
@@ -268,9 +287,10 @@ namespace GoogleFu
 														"0",
 														"0",
 														"-5",
+														"0",
 														"0"));
 			Rows.Add( new TileDBRow("Tile_Park",
-														"5",
+														"30",
 														"-2",
 														"0",
 														"5",
@@ -278,9 +298,10 @@ namespace GoogleFu
 														"0",
 														"0",
 														"-3",
-														"0"));
+														"0",
+														"1"));
 			Rows.Add( new TileDBRow("Tile_Police",
-														"5",
+														"100",
 														"-2",
 														"0",
 														"1",
@@ -288,9 +309,10 @@ namespace GoogleFu
 														"0",
 														"20",
 														"0",
-														"0"));
+														"0",
+														"2"));
 			Rows.Add( new TileDBRow("Tile_Fire",
-														"5",
+														"100",
 														"-2",
 														"0",
 														"1",
@@ -298,9 +320,10 @@ namespace GoogleFu
 														"0",
 														"0",
 														"20",
-														"0"));
+														"0",
+														"2"));
 			Rows.Add( new TileDBRow("Tile_Hospital",
-														"5",
+														"100",
 														"-2",
 														"0",
 														"1",
@@ -308,7 +331,8 @@ namespace GoogleFu
 														"0",
 														"0",
 														"0",
-														"20"));
+														"20",
+														"2"));
 		}
 		public IGoogleFuRow GetGenRow(string in_RowString)
 		{

@@ -6,10 +6,11 @@ public class CityTileNeighbourBonus : CityTile {
     public List<string> neighbourTypes;
     public Economy.Types effectType = Economy.Types.PROFIT;
     public int effectAmount = 1;
+    public int radius = 1;
 
     public override Economy CalculateEconomyChange(GameManager gm)
     {
-        System.Collections.Generic.List<CityTile> neighbours = gm.GetNeighbourTiles(this);
+        System.Collections.Generic.List<CityTile> neighbours = gm.GetNeighbourTiles(this,radius);
         Economy calcEconomy = new Economy();
         calcEconomy = calcEconomy + baseEconomy;
         int tilesMatchingCondition = 0;

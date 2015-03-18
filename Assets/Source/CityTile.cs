@@ -8,6 +8,8 @@ public class CityTile : MonoBehaviour {
     public int row;
     public int column;
 
+    public int cost;
+
     public Economy baseEconomy;
 
     public virtual Economy CalculateEconomyChange(GameManager gm)
@@ -22,6 +24,8 @@ public class CityTile : MonoBehaviour {
         type = t;
         row = r;
         column = c;
+
+        cost = config._cost;
     }
 
 	// Use this for initialization

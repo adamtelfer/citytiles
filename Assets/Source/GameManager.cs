@@ -131,14 +131,19 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
-    public System.Collections.Generic.List<CityTile> GetNeighbourTiles (CityTile tile)
+    public System.Collections.Generic.List<CityTile> GetNeighbourTiles (CityTile tile, int radius = 1)
     {
         System.Collections.Generic.List<CityTile> list = new System.Collections.Generic.List<CityTile>(4);
         CityTile nTile = null;
-        if (TryGetTileAt(tile.row + 1, tile.column, ref nTile)) { list.Add(nTile); }
-        if (TryGetTileAt(tile.row - 1, tile.column, ref nTile)) { list.Add(nTile); }
-        if (TryGetTileAt(tile.row, tile.column + 1, ref nTile)) { list.Add(nTile); }
-        if (TryGetTileAt(tile.row, tile.column - 1, ref nTile)) { list.Add(nTile); }
+
+        for (int rm = -radius; rm <= radius; ++rm)
+        {
+            for (int cm = -radius; cm <= radius; ++cm)
+            {
+                if (TryGetTileAt(tile.row + rm, tile.column + cm, ref nTile)) { list.Add(nTile); }
+            }
+        }
+
         return list;
     }
 
@@ -220,6 +225,10 @@ public class GameManager : MonoBehaviour {
 
         RefreshEconomy();
         
+        if (_currentAddingTile != null) {
+            cash -= currentAddingTile.cost;
+        }
+
         cash += currentEconomy.profit;
 
         _currentAddingTile = null;
